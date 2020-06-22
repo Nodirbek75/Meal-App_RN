@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createDrawerNavigator } from "react-navigation-drawer";
@@ -17,6 +17,12 @@ import Colors from "../constants/colors";
 const defNavOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === "android" ? Colors.primary : "",
+  },
+  headerTitleStyle: {
+    fontFamily: "open-sans-bold",
+  },
+  headerBackTitleStyle: {
+    fontFamily: "open-sans",
   },
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
@@ -57,6 +63,12 @@ const tabScreenConfig = {
         );
       },
       tabBarColor: Colors.primary,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Meals</Text>
+        ) : (
+          "Meals"
+        ),
     },
   },
   Favourities: {
@@ -68,6 +80,12 @@ const tabScreenConfig = {
         );
       },
       tabBarColor: Colors.secondary,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Favourities</Text>
+        ) : (
+          "Favourities"
+        ),
     },
   },
 };
@@ -81,12 +99,31 @@ const MealsTabNavigator =
     : createBottomTabNavigator(tabScreenConfig, {
         tabBarOptions: {
           activeTintColor: Colors.secondary,
+          labelStyle: {
+            fontFamily: "open-sans-bold",
+          },
         },
       });
 
-const MainNavigator = createDrawerNavigator({
-  MealFav: MealsTabNavigator,
-  Filters: FiltersNavigator,
-});
+const MainNavigator = createDrawerNavigator(
+  {
+    MealFav: {
+      screen: MealsTabNavigator,
+      navigationOptions: {
+        drawerLabel: "Meals",
+      },
+    },
+    Filters: FiltersNavigator,
+  },
+  {
+    contentOptions: {
+      activeTintColor: Colors.secondary,
+      labelStyle: {
+        fontFamily: "open-sans-bold",
+        fontSize: 18,
+      },
+    },
+  }
+);
 
 export default createAppContainer(MainNavigator);
